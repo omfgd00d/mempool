@@ -107,7 +107,7 @@ export class PoolRankingComponent implements OnInit {
   }
 
   generatePoolsChartSerieData(miningStats) {
-    const poolShareThreshold = this.isMobile() ? 2 : 1; // Do not draw pools which hashrate share is lower than that
+    const maxSlices = 10;
     const data: object[] = [];
     let totalShareOther = 0;
     let totalBlockOther = 0;
@@ -120,8 +120,9 @@ export class PoolRankingComponent implements OnInit {
       edgeDistance = 10;
     }
 
+    let slices = 0;
     miningStats.pools.forEach((pool) => {
-      if (parseFloat(pool.share) < poolShareThreshold) {
+      if (slices++ >= maxSlices) {
         totalShareOther += parseFloat(pool.share);
         totalBlockOther += pool.blockCount;
         totalEstimatedHashrateOther += pool.lastEstimatedHashrate;
